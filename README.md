@@ -1,0 +1,2 @@
+# ansible-mackerel-dynamic-inventory
+
