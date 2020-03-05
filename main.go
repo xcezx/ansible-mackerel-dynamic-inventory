@@ -11,9 +11,9 @@ import (
 )
 
 var privateIPNets = map[string]*net.IPNet{
-	"10.0.0.0/8":     &net.IPNet{IP: net.IP{0xa, 0x0, 0x0, 0x0}, Mask: net.IPMask{0xff, 0x0, 0x0, 0x0}},
-	"172.16.0.0/12":  &net.IPNet{IP: net.IP{0xac, 0x10, 0x0, 0x0}, Mask: net.IPMask{0xff, 0xf0, 0x0, 0x0}},
-	"192.168.0.0/16": &net.IPNet{IP: net.IP{0xc0, 0xa8, 0x0, 0x0}, Mask: net.IPMask{0xff, 0xff, 0x0, 0x0}},
+	"10.0.0.0/8":     {IP: net.IP{0xa, 0x0, 0x0, 0x0}, Mask: net.IPMask{0xff, 0x0, 0x0, 0x0}},
+	"172.16.0.0/12":  {IP: net.IP{0xac, 0x10, 0x0, 0x0}, Mask: net.IPMask{0xff, 0xf0, 0x0, 0x0}},
+	"192.168.0.0/16": {IP: net.IP{0xc0, 0xa8, 0x0, 0x0}, Mask: net.IPMask{0xff, 0xff, 0x0, 0x0}},
 }
 
 func isPrivateIP(ip string) bool {
@@ -30,10 +30,6 @@ type Inventory struct {
 	addedHosts     map[string]bool
 	Groups         map[string][]string
 	Meta           map[string]map[string]interface{}
-}
-
-type HostVars struct {
-	Hosts map[string]interface{}
 }
 
 func NewInventory(mackerelClient *mackerel.Client) *Inventory {
@@ -163,11 +159,11 @@ func main() {
 			i := NewInventory(client)
 
 			if c.Bool("list") {
-				fmt.Fprintln(c.App.Writer, i.List())
+				_, _ = fmt.Fprintln(c.App.Writer, i.List())
 				return nil
 			}
 			if host := c.String("host"); host != "" {
-				fmt.Fprintln(c.App.Writer, i.Host(host))
+				_, _ = fmt.Fprintln(c.App.Writer, i.Host(host))
 				return nil
 			}
 
